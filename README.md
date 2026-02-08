@@ -39,8 +39,11 @@ No local PHP, MySQL, or Node installation is required.
 
 ## Running the demo
 
-From the repository root:
+From the repository root, execute the following commands:
 
 ```bash
 chmod +x run.sh
-./run.sh
+./run.sh```
+
+
+And follow the instructions from the terminal
