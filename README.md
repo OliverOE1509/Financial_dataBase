@@ -8,6 +8,8 @@
 
 The intended purpose of this repo, is to give a minimal, and easy to use GUI for my MySQL database that collects data on financial markets. This is made to give a proof of work, without putting execution authority for my database at risk. This is only a snapshot of the database, whereas the database stored on phpmyadmin is secure and updating itself every day, with the newest data available.
 
+The target audience for this repo is potential employers of Oliver Ekeberg. 
+
 ## Database structure (high level)
 
 The database contains multiple logical domains:
