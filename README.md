@@ -23,6 +23,12 @@ The database contains multiple logical domains:
 
 - **Commodities**
   - `Raavare_kurser`
+ 
+As well as 
+- **Portfolios**
+  - `Portfolio_values`
+
+But this is empty as of 8th of February, will come later.
 
 The demo UI currently visualises **close prices for equities** using the `Kurser` table, selected by ticker.
 
