@@ -52,5 +52,7 @@ No local PHP, MySQL, or Node installation is required.
 From the repository root, execute the following commands, and follow instructions from terminal:
 
 ```bash
+git clone https://github.com/OliverOE1509/Financial_dataBase.git
+cd Financial_dataBase
 chmod +x run.sh
 ./run.sh```
