@@ -55,4 +55,5 @@ From the repository root, execute the following commands, and follow instruction
 git clone https://github.com/OliverOE1509/Financial_dataBase.git
 cd Financial_dataBase
 chmod +x run.sh
-./run.sh```
+./run.sh
+
