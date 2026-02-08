@@ -1,0 +1,35 @@
+services:
+  db:
+    image: mariadb:11.4
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+    volumes:
+      - ./mysql/FinansDB.sql:/docker-entrypoint-initdb.d/001_FinansDB.sql:ro
+      - ./mysql/002_readonly_user.sql:/docker-entrypoint-initdb.d/002_readonly_user.sql:ro
+      - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-p${MARIADB_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  web:
+    build: ./app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_NAME: FinansDB
+      DB_USER: readonly
+      DB_PASS: readonly
+      TZ: Europe/Oslo
+    volumes:
+      - ./app:/var/www/html:ro
+    ports:
+      - "8080:80"
+
+volumes:
+  db_data:
