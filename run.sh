@@ -1,20 +1,11 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
 echo "=== FinansDB demo launcher ==="
 
-# 1) Check Docker
-if ! command -v docker >/dev/null 2>&1; then
-  echo "ERROR: Docker is not installed."
-  exit 1
-fi
+command -v docker >/dev/null 2>&1 || { echo "ERROR: Docker is not installed."; exit 1; }
+docker compose version >/dev/null 2>&1 || { echo "ERROR: docker compose is not available."; exit 1; }
 
-if ! docker compose version >/dev/null 2>&1; then
-  echo "ERROR: docker compose is not available."
-  exit 1
-fi
-
-# 2) Ensure .env exists
 if [ ! -f .env ]; then
   if [ -f .env.example ]; then
     echo "No .env found. Creating one from .env.example"
@@ -25,14 +16,18 @@ if [ ! -f .env ]; then
   fi
 fi
 
-# 3) Start containers
 echo "Starting containers..."
 docker compose up -d --build
 
-# 4) Wait for DB health
 echo "Waiting for database to become healthy..."
-for i in {1..30}; do
-  DB_STATUS=$(docker inspect --format='{{.State.Health.Status}}' financial_database-db-1 2>/dev/null || true)
+DB_ID="$(docker compose ps -q db)"
+if [ -z "$DB_ID" ]; then
+  echo "ERROR: db service not found."
+  exit 1
+fi
+
+for i in $(seq 1 60); do
+  DB_STATUS="$(docker inspect --format='{{.State.Health.Status}}' "$DB_ID" 2>/dev/null || true)"
   if [ "$DB_STATUS" = "healthy" ]; then
     echo "Database is healthy."
     break
@@ -40,33 +35,23 @@ for i in {1..30}; do
   sleep 1
 done
 
-if [ "$DB_STATUS" != "healthy" ]; then
-  echo "ERROR: Database did not become healthy."
+if [ "${DB_STATUS:-}" != "healthy" ]; then
+  echo "ERROR: Database did not become healthy. See logs:"
+  docker compose logs --tail=200 db
   exit 1
 fi
 
-# 5) Check web container
-if ! docker compose ps web | grep -q "Up"; then
-  echo "ERROR: Web container is not running."
-  exit 1
-fi
-
-# 6) Final instructions
 echo ""
 echo "=== Demo is running ==="
 echo ""
-echo "Open the following links in your browser:"
-echo ""
-echo "• Web UI (Chart.js):"
+echo "Web UI:"
 echo "  http://localhost:8080"
 echo ""
-echo "• API – list of tickers:"
+echo "API (tickers):"
 echo "  http://localhost:8080/api.php?action=tickers"
 echo ""
-echo "• API – close prices example:"
+echo "API (close example):"
 echo "  http://localhost:8080/api.php?action=close&ticker=EQNR"
 echo ""
-echo "To stop everything:"
+echo "Stop:"
 echo "  docker compose down"
-echo ""
-echo "======================="

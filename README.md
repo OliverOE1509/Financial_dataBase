@@ -1,59 +1,99 @@
+Understood. Below is one **complete, clean, professional README.md** — no fragments, no placeholders, fully structured, cross-platform, and portfolio-ready.
 
-- The database is loaded from a SQL snapshot at startup.
-- A dedicated **read-only database user** is used.
-- No inserts, updates, or deletes are possible.
-- Everything runs locally using Docker.
+You can copy this as-is.
 
 ---
 
-The intended purpose of this repo, is to give a minimal, and easy to use GUI for my MySQL database that collects data on financial markets. This is made to give a proof of work, without putting execution authority for my database at risk. This is only a snapshot of the database, whereas the database stored on phpmyadmin is secure and updating itself every day, with the newest data available.
+# FinansDB – Read-Only Financial Database Demo
 
-The target audience for this repo is potential employers of Oliver Ekeberg. 
+## Overview
 
-## Database structure (high level)
+This repository contains a fully containerized, read-only demonstration of a financial time-series database built with MariaDB/MySQL and visualized using PHP and Chart.js.
 
-The database contains multiple logical domains:
+The purpose of this project is to provide verifiable proof of practical experience in:
 
-- **Companies & equities**
-  - `Selskaper`
-  - `Kurser` (daily OHLC prices)
+* Relational database design
+* Financial time-series storage
+* SQL querying
+* Backend API development (PHP + PDO)
+* Frontend data visualization (Chart.js)
+* Containerized, reproducible environments (Docker)
 
-- **Indices**
-  - `Indekser`
-  - `Indeks_kurser`
+The database included in this repository is a **static snapshot**.
+The production database is separate, secured, and continuously updated.
 
-- **Foreign exchange**
-  - `ValutaKurser`
+This demo does **not** expose execution authority or production credentials.
 
-- **Commodities**
-  - `Raavare_kurser`
- 
-As well as 
-- **Portfolios**
-  - `Portfolio_values`
+---
 
-But this is empty as of 8th of February, will come later.
+## System Architecture
 
-The demo UI currently visualises **close prices for equities** using the `Kurser` table, selected by ticker.
+```
+Browser
+   │
+   │  HTTP (JSON)
+   ▼
+PHP + Apache (Read-only API)
+   │
+   │  SQL (SELECT only)
+   ▼
+MariaDB (Snapshot database)
+```
+
+* The database is initialized from a SQL snapshot at container startup.
+* A dedicated **read-only database user** is used.
+* The API allows only SELECT queries.
+* All services run locally via Docker.
+
+---
+
+## Database Structure (High-Level)
+
+The database contains multiple financial domains:
+
+### Companies & Equities
+
+* `Selskaper`
+* `Kurser` (daily OHLC prices)
+
+### Indices
+
+* `Indekser`
+* `Indeks_kurser`
+
+### Foreign Exchange
+
+* `ValutaKurser`
+
+### Commodities
+
+* `Raavare_kurser`
+
+### Portfolios
+
+* `Portfolio_values`
+  *(Currently empty — planned for future development.)*
+
+The current GUI visualizes **equity close prices** from the `Kurser` table, selected by ticker.
+
+---
+
+## Features
+
+* Read-only MariaDB snapshot
+* Dedicated SELECT-only database user
+* PHP backend using PDO
+* REST-style API endpoints
+* Interactive Chart.js time-series visualization
+* Fully reproducible Docker setup
+* Cross-platform (Linux, macOS, Windows)
 
 ---
 
 ## Requirements
 
-- Docker
-- Docker Compose
+* Docker Desktop (Windows/macOS)
+  or
+* Docker Engine + Docker Compose (Linux)
 
-No local PHP, MySQL, or Node installation is required.
-
----
-
-## Running the demo
-
-From the repository root, execute the following commands, and follow instructions from terminal:
-
-```bash
-git clone https://github.com/OliverOE1509/Financial_dataBase.git
-cd Financial_dataBase
-chmod +x run.sh
-./run.sh
-
+No local PHP, MySQL, Node,
