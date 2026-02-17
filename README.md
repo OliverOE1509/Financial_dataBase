@@ -1,9 +1,3 @@
-Understood. Below is one **complete, clean, professional README.md** — no fragments, no placeholders, fully structured, cross-platform, and portfolio-ready.
-
-You can copy this as-is.
-
----
-
 # FinansDB – Read-Only Financial Database Demo
 
 ## Overview
